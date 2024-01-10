@@ -3,6 +3,8 @@ import urllib.request
 import requests 
 import base64
 import json
+import TextFormattingHandler
+
 
 class JobScrapingService:
     
@@ -38,6 +40,7 @@ class JobScrapingService:
         return readme_content
 
 
-# scrapper = JobScrappingService()
-# positions=scrapper.get_github_newgrad2024()
-# print(positions)
+scraper = JobScrapingService()
+formatter = TextFormattingHandler.TextFormattingHandler()
+df_newGrad = formatter.readme_to_dataframe(str(scraper.get_github_newgrad2024()))
+print(df_newGrad.iloc[[0]])
