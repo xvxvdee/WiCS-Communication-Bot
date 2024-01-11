@@ -3,8 +3,6 @@ import urllib.request
 import requests 
 import base64
 import json
-import TextFormattingHandler
-
 
 class JobScrapingService:
     
@@ -38,12 +36,3 @@ class JobScrapingService:
         data = response.json()
         readme_content = base64.b64decode(data['content'])
         return str(readme_content)
-
-# scraper = JobScrapingService()
-# formatter = TextFormattingHandler.TextFormattingHandler()
-
-# df = formatter.json_to_dataframe(scraper.get_remote_zobjobs())
-# print(df.iloc[0])
-
-# df_newGrad = formatter.readme_to_dataframe(scraper.get_github_internship2024())
-# print(df_newGrad.iloc[[0]])
