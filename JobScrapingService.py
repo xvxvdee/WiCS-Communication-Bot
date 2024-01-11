@@ -23,24 +23,27 @@ class JobScrapingService:
         request = requests.get(URL) 
         request.encoding = request.apparent_encoding 
         soup = BeautifulSoup(request.text, 'html5lib') 
-        return soup.encode("utf-8")
+        return str(soup.encode("utf-8"))
     
     def get_github_offseason2024(self):
         URL = self.offseason_internships
         response = requests.get(URL) 
         data = response.json()
         readme_content = base64.b64decode(data['content'])
-        return readme_content
+        return str(readme_content)
     
     def get_github_newgrad2024(self):
         URL = self.newgrad_internships
         response = requests.get(URL) 
         data = response.json()
         readme_content = base64.b64decode(data['content'])
-        return readme_content
+        return str(readme_content)
 
+# scraper = JobScrapingService()
+# formatter = TextFormattingHandler.TextFormattingHandler()
 
-scraper = JobScrapingService()
-formatter = TextFormattingHandler.TextFormattingHandler()
-df_newGrad = formatter.readme_to_dataframe(str(scraper.get_github_newgrad2024()))
-print(df_newGrad.iloc[[0]])
+# df = formatter.json_to_dataframe(scraper.get_remote_zobjobs())
+# print(df.iloc[0])
+
+# df_newGrad = formatter.readme_to_dataframe(scraper.get_github_internship2024())
+# print(df_newGrad.iloc[[0]])
