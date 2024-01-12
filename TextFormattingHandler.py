@@ -7,6 +7,7 @@ class TextFormattingHandler:
     def __init__(self):
         self.table_start="Please leave a one line gap between this and the table TABLE_START (DO NOT CHANGE THIS LINE) -->\\n\\n"
         self.table_end ="\\n\\n<!-- Please leave a one line gap between this and the table TABLE_END (DO NOT CHANGE THIS LINE) -->"
+        self.DATE_FORMAT = "%m/%d"
 
     def readme_to_dataframe(self, text): # Formats internships and new grad readmes
         # Locate readme table
@@ -48,7 +49,6 @@ class TextFormattingHandler:
         # Drop empty columns
         df = df.drop("EmptyFront",axis=1)
         df = df.drop("EmptyBack",axis=1)
-
         return df
 
     def json_to_dataframe(self,json_data): # Json from zobjobs endpoint to dataframe
@@ -64,11 +64,11 @@ class TextFormattingHandler:
         date = text.strip()
         try:
             # Create datetime object for MM/DD format
-            date = datetime.strptime(date,'%b %d').strftime("%m/%d")
+            date = datetime.strptime(date,'%b %d').strftime(self.DATE_FORMAT)
             return date
         except(TypeError): 
             # Create datetime object for MM/YYYY format
-            date = datetime.strptime(date,'%b %Y').strftime("%m/%d")
+            date = datetime.strptime(date,'%b %Y').strftime(self.DATE_FORMAT)
             return date
         except(ValueError):
             return text
@@ -78,12 +78,12 @@ class TextFormattingHandler:
             date_object = datetime.strptime(text + '/' + str(datetime.now().year), '%m/%d/%Y')
             yesterday = date_object - timedelta(days=1)
             # Format into readable string
-            readable_dt_str = yesterday.strftime("%m/%d")
+            readable_dt_str = yesterday.strftime(self.DATE_FORMAT)
             return readable_dt_str
         except(TypeError): # Given a datetime object
             yesterday = text - timedelta(days=1)
             # Format into readable string
-            readable_dt_str = yesterday.strftime("%m/%d")
+            readable_dt_str = yesterday.strftime(self.DATE_FORMAT)
             return readable_dt_str
         except(ValueError):
             return text
