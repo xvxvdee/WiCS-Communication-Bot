@@ -16,7 +16,7 @@ class DataFrameAccessor:
                 df.at[i,"Company"] = df["Company"][i-1]
         return df
 
-    def get_company_text(self,text,df): # Gets title text from df which was formatted in markdown
+    def get_company_text(self,text): # Gets title text from df which was formatted in markdown
         return plain(text)
 
     def get_company_link(self,text): # Gets title link from df formatted in markdown
