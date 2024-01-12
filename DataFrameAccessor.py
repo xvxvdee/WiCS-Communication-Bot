@@ -23,7 +23,7 @@ class DataFrameAccessor:
         try:
             start_index = text.index("]")+2 # +2 to avoid  ](
             return text[start_index:len(text)-3] # -3 to remove )**
-        except:
+        except(ValueError):
             return None
         
     def get_application_link(self,text): # Gets application link from df formatted in markdown
@@ -43,7 +43,7 @@ class DataFrameAccessor:
             # Create a list of locations based on the content excluding the html
             locations = [str(x) for x in content if str(x)!="<br/>"]
             return " | ".join(locations)
-        except:
+        except(AttributeError):
             return text
         
     def get_reccent_postings(self,df): # Returns a dataframe of internship/new grad role from yesterday
@@ -57,6 +57,5 @@ class DataFrameAccessor:
         if (new_postings):
             df_postings = df.loc[df[self.date_posted_column]==str(prev_post_date)]
             return df_postings
-
         else:
             return None
