@@ -16,10 +16,10 @@ class DataFrameAccessor:
                 df.at[i,"Company"] = df["Company"][i-1]
         return df
 
-    def get_title_text(self,text,df): # Gets title text from df which was formatted in markdown
+    def get_company_text(self,text,df): # Gets title text from df which was formatted in markdown
         return plain(text)
 
-    def get_title_link(self,text): # Gets title link from df formatted in markdown
+    def get_company_link(self,text): # Gets title link from df formatted in markdown
         try:
             start_index = text.index("]")+2 # +2 to avoid  ](
             return text[start_index:len(text)-3] # -3 to remove )**
