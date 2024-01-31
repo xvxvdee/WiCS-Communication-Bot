@@ -30,7 +30,6 @@ async def send_new_grad_roles():
     job_channel = client.get_channel(1202309603602464768)
     plugs = client.get_channel(817211947908595713)
 
-    await job_channel.send("Testing!")
     df_posting = job_fetcher.latest_newgrad_postings()
     newgrad_color = 0xf2f0ff
 
