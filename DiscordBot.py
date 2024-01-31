@@ -27,9 +27,10 @@ async def on_ready():
 
 @tasks.loop(hours=24)
 async def send_new_grad_roles():
-    job_channel = client.get_channel(1200151138645856266)
-    #plugs = client.get_channel(817211947908595713)
+    job_channel = client.get_channel(1202309603602464768)
+    plugs = client.get_channel(817211947908595713)
 
+    await job_channel.send("Testing!")
     df_posting = job_fetcher.latest_newgrad_postings()
     newgrad_color = 0xf2f0ff
 
@@ -43,7 +44,7 @@ async def send_new_grad_roles():
             embed.add_field(name="Application Link", value=data_accessor.get_application_link(row), inline=False)
             embed.set_footer(text="Resume icons created by juicy_fish - Flaticon")
             await job_channel.send(embed=embed)
-           # await plugs.send(embed=embed)
+            await plugs.send(embed=embed)
     except(AttributeError) as err:
         print(err)
         return
