@@ -1,3 +1,6 @@
-discord
-requests
-python-dotenv
+pandas==2.1.4
+mdplain==1.0
+beautifulsoup4==4.11.1
+python-dotenv==0.21.1
+discord.py==2.1.1
+
