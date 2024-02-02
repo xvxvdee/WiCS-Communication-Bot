@@ -51,7 +51,7 @@ async def send_new_grad_roles():
 
 @tasks.loop(hours=24)
 async def send_summer_roles():
-    job_channel = client.get_channel(1200151138645856266)
+    job_channel = client.get_channel(1202309603602464768)
     df_posting = job_fetcher.latest_internship_postings()
     newgrad_color = 0xd1c171
     try:
@@ -70,7 +70,7 @@ async def send_summer_roles():
 
 @tasks.loop(hours=24)
 async def send_offseason_roles():
-    job_channel = client.get_channel(1200151138645856266)
+    job_channel = client.get_channel(1202309603602464768)
     df_posting = job_fetcher.latest_offseason_postings()
     newgrad_color = 0x71b4d1
 
