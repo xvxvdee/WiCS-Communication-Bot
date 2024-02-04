@@ -19,16 +19,12 @@ class DataFrameAccessor:
         return df
 
     def get_reccent_postings(self,df): # Returns a dataframe of internship/new grad role from yesterday
-        # Check dates match and date in dataframe
         yesterday = self.formatter.get_previous_date(datetime.today())
-        prev_post_date = self.formatter.get_previous_date(df[self.DATE_POSTED][0])
-
         # Condition for there to be new postings
-        new_postings = (yesterday == prev_post_date) and (str(prev_post_date) in df[self.DATE_POSTED].values)
-
+        new_postings = yesterday in df[self.DATE_POSTED].values
         if (new_postings):
             # Filter for the day before and avoid closed applications
-            df_postings = df.loc[(df[self.DATE_POSTED] == str(prev_post_date))&(df["Application Link"].str.contains("https"))]# & (df["Application Link"] !=self.LOCK_EMOJI_1) & (df["Application Link"] !=self.LOCK_EMOJI_2)]
+            df_postings = df.loc[(df[self.DATE_POSTED] == str(yesterday))&(df["Application Link"].str.contains("https"))]# & (df["Application Link"] !=self.LOCK_EMOJI_1) & (df["Application Link"] !=self.LOCK_EMOJI_2)]
             return df_postings
         else:
             return None
