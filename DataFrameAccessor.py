@@ -19,6 +19,7 @@ class DataFrameAccessor:
         return df
 
     def get_reccent_postings(self,df): # Returns a dataframe of internship/new grad role from yesterday
+        
         yesterday = self.formatter.get_previous_date(datetime.today())
         # Condition for there to be new postings
         new_postings = yesterday in df[self.DATE_POSTED].values
@@ -81,7 +82,7 @@ class DataFrameAccessor:
             content = details_tag.contents[1:]
 
             # Create a list of locations based on the content excluding the html
-            locations = [str(x) for x in content if "<br/>" not in x]
+            locations = [str(x.get_text(" ")) for x in content if len(x)>1]
             return " | ".join(locations)
         except(AttributeError): # No details tag
             locations = soup.get_text(" | ")
