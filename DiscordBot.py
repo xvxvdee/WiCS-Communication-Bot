@@ -1,4 +1,5 @@
 import discord 
+import time
 from discord.ext import tasks,commands
 import os
 from dotenv import load_dotenv 
@@ -25,25 +26,32 @@ async def on_ready():
     send_summer_roles.start()
     send_offseason_roles.start()
 
+
+
 @tasks.loop(hours=24)
 async def send_new_grad_roles():
     job_channel = client.get_channel(1202309603602464768)
     plugs = client.get_channel(817211947908595713)
-    
     df_posting = job_fetcher.latest_newgrad_postings()
     newgrad_color = 0xf2f0ff
 
     try:
         for i, row in df_posting.iterrows():
-            embed=discord.Embed(title="NEW GRAD POSTING", description=data_accessor.get_company_text(row), color=newgrad_color)
+            embed=discord.Embed(description="New Grad", title=data_accessor.get_company_text(row), color=newgrad_color)
             embed.set_thumbnail(url=newgrad_icon)
             embed.add_field(name="Role", value=data_accessor.get_role(row), inline=True)
             embed.add_field(name="Date Posted", value=data_accessor.get_date_posted(row), inline=True)
             embed.add_field(name="Location", value=data_accessor.get_locations(row), inline=False)
             embed.add_field(name="Application Link", value=data_accessor.get_application_link(row), inline=False)
             embed.set_footer(text="Resume icons created by juicy_fish - Flaticon")
-            await job_channel.send(embed=embed)
-            await plugs.send(embed=embed)
+            
+            try:
+                await job_channel.send(embed=embed)
+                await plugs.send(embed=embed)
+            except Exception as e:
+                print(f"New grad role {data_accessor.get_company_text(row)} failed to send.\n{str(e)}")
+            time.sleep(5);
+
     except(AttributeError) as err:
         print(err)
         return
@@ -53,17 +61,22 @@ async def send_new_grad_roles():
 async def send_summer_roles():
     job_channel = client.get_channel(1202309603602464768)
     df_posting = job_fetcher.latest_internship_postings()
-    newgrad_color = 0xd1c171
+    summer_color = 0xd1c171
     try:
         for i, row in df_posting.iterrows():
-            embed=discord.Embed(title="SUMMER INTERNSHIP POSTING", description=data_accessor.get_company_text(row), color=newgrad_color)
+            embed=discord.Embed(description="Summer Internship", title=data_accessor.get_company_text(row), color=summer_color)
             embed.set_thumbnail(url=internship_icon)
             embed.add_field(name="Role", value=data_accessor.get_role(row), inline=True)
             embed.add_field(name="Date Posted", value=data_accessor.get_date_posted(row), inline=True)
             embed.add_field(name="Location", value=data_accessor.get_locations(row), inline=False)
             embed.add_field(name="Application Link", value=data_accessor.get_application_link(row), inline=False)
             embed.set_footer(text="Resume icons created by juicy_fish - Flaticon")
-            await job_channel.send(embed=embed)
+            try:
+                await job_channel.send(embed=embed)
+            except Exception as e:
+                print(f"Internship role {data_accessor.get_company_text(row)} failed to send.\n{str(e)}")
+            time.sleep(5);
+
     except(AttributeError) as err:
         print(err)
         return
@@ -72,19 +85,25 @@ async def send_summer_roles():
 async def send_offseason_roles():
     job_channel = client.get_channel(1202309603602464768)
     df_posting = job_fetcher.latest_offseason_postings()
-    newgrad_color = 0x71b4d1
+    offseason_color = 0x71b4d1
 
     try:
         for i, row in df_posting.iterrows():
-            embed=discord.Embed(title="OFFSEASON INTERNSHIP POSTING", description=data_accessor.get_company_text(row), color=newgrad_color)
-            embed.set_thumbnail(url=internship_icon)
+            embed=discord.Embed(description="Offseason Internship", title=data_accessor.get_company_text(row), color=offseason_color)
+            embed.set_thumbnail(url=offseason_icon)
             embed.add_field(name="Role", value=data_accessor.get_role(row), inline=True)
             embed.add_field(name="Date Posted", value=data_accessor.get_date_posted(row), inline=True)
             embed.add_field(name="Term(s)", value=data_accessor.get_terms(row), inline=False)
             embed.add_field(name="Location", value=data_accessor.get_locations(row), inline=False)
             embed.add_field(name="Application Link", value=data_accessor.get_application_link(row), inline=False)
             embed.set_footer(text="Resume icons created by juicy_fish - Flaticon")
-            await job_channel.send(embed=embed)
+            
+            try:
+                await job_channel.send(embed=embed)
+            except Exception as e:
+                print(f"Offseason role {data_accessor.get_company_text(row)} failed to send.\n{str(e)}")
+            time.sleep(5);
+
     except(AttributeError) as err:
         print(err)
         return
