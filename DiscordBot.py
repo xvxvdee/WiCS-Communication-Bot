@@ -30,8 +30,8 @@ async def on_ready():
 
 @tasks.loop(hours=24)
 async def send_new_grad_roles():
-    job_channel = client.get_channel(1202309603602464768)
-    plugs = client.get_channel(817211947908595713)
+    job_channel = client.get_channel(1200151138645856266)
+   # plugs = client.get_channel(817211947908595713)
     df_posting = job_fetcher.latest_newgrad_postings()
     newgrad_color = 0xf2f0ff
 
@@ -47,7 +47,7 @@ async def send_new_grad_roles():
             
             try:
                 await job_channel.send(embed=embed)
-                await plugs.send(embed=embed)
+              # await plugs.send(embed=embed)
             except Exception as e:
                 print(f"New grad role {data_accessor.get_company_text(row)} failed to send.\n{str(e)}")
             time.sleep(5);
@@ -59,7 +59,7 @@ async def send_new_grad_roles():
 
 @tasks.loop(hours=24)
 async def send_summer_roles():
-    job_channel = client.get_channel(1202309603602464768)
+    job_channel = client.get_channel(1200151138645856266)
     df_posting = job_fetcher.latest_internship_postings()
     summer_color = 0xd1c171
     try:
@@ -83,7 +83,7 @@ async def send_summer_roles():
 
 @tasks.loop(hours=24)
 async def send_offseason_roles():
-    job_channel = client.get_channel(1202309603602464768)
+    job_channel = client.get_channel(1200151138645856266)
     df_posting = job_fetcher.latest_offseason_postings()
     offseason_color = 0x71b4d1
 
