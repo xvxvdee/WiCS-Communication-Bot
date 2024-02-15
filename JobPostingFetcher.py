@@ -16,7 +16,9 @@ class JobPostingFetcher:
         df_internships = self.data_accessor.update_company_column(df_internships)
 
         # Get latest postings
+        posting_type="internship_postings"
         df_postings = self.data_accessor.get_reccent_postings(df_internships)
+        df_postings = self.formatter.dataframe_to_csv(df_postings,posting_type)
         return df_postings
 
     def latest_offseason_postings(self):
@@ -26,7 +28,9 @@ class JobPostingFetcher:
         df_offseason = self.data_accessor.update_company_column(df_offseason)
         
         # Get latest postings
+        posting_type = "offseason_postings"
         df_postings = self.data_accessor.get_reccent_postings(df_offseason)
+        df_postings=self.formatter.dataframe_to_csv(df_postings,posting_type)
         return df_postings
 
     def latest_newgrad_postings(self):
@@ -36,6 +40,8 @@ class JobPostingFetcher:
         df_newgrad = self.data_accessor.update_company_column(df_newgrad)
         
         # Get latest postings
+        posting_type="newgrad_postings"
         df_postings = self.data_accessor.get_reccent_postings(df_newgrad)
+        df_postings=self.formatter.dataframe_to_csv(df_postings,posting_type)
         return df_postings
 
