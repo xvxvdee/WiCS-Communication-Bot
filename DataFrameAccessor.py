@@ -23,9 +23,12 @@ class DataFrameAccessor:
         yesterday = self.formatter.get_previous_date(datetime.today())
         # Condition for there to be new postings
         new_postings = yesterday in df[self.DATE_POSTED].values
+
         if (new_postings):
             # Filter for the day before and avoid closed applications
             df_postings = df.loc[(df[self.DATE_POSTED] == str(yesterday))&(df["Application Link"].str.contains("https"))]# & (df["Application Link"] !=self.LOCK_EMOJI_1) & (df["Application Link"] !=self.LOCK_EMOJI_2)]
+            df_postings = df_postings.copy()
+            df_postings["Shared"] = False
             return df_postings
         else:
             return None
@@ -87,4 +90,12 @@ class DataFrameAccessor:
         except(AttributeError): # No details tag
             locations = soup.get_text(" | ")
             return locations
+    def get_posted(self,row):
+        return row["Shared"]
+
+    def update_posted_status(self,index,df):
+        df.at[index,"Shared"]=True
+
+    def update_failed_posted_status(self,index,df):
+        df.at[index,"Shared"]=False
         
