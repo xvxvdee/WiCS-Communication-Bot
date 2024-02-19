@@ -61,7 +61,7 @@ async def send_new_grad_roles():
                 
                 try:
                     await job_channel.send(embed=embed)
-                    # await plugs.send(embed=embed)
+                    await plugs.send(embed=embed)
                     data_accessor.update_posted_status(i,df_posting)
                     df_posting.to_csv("Data/newgrad_postings.csv",header=True, index=True)
                 except Exception as e:

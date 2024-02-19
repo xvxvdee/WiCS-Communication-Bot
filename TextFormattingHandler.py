@@ -108,6 +108,10 @@ class TextFormattingHandler:
             df_csv = pd.read_csv(filename)
             return df_csv
         else:
-            df.to_csv(filename,header=True,index=True)
-            return df
+            try:
+                df.to_csv(filename,header=True,index=True)
+                return df
+            except(AttributeError):
+                print("No new postings.")
+                return None
 
