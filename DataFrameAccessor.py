@@ -2,14 +2,15 @@ from datetime import datetime, timedelta
 from mdplain import plain
 from bs4 import BeautifulSoup
 from TextFormattingHandler import TextFormattingHandler
-
+import hashlib
 class DataFrameAccessor:
-    def __init__(self):        
+    def __init__(self,logger):        
         self.EMOJI = "\\x"
         self.formatter = TextFormattingHandler()
         self.DATE_POSTED = "Date Posted"
         self.NO_SPONSORSHIP = "\\xf0\\x9f\\x9b\\x82"
         self.US_CITIZEN_ONLY = "\\xf0\\x9f\\x87\\xba\\xf0\\x9f\\x87\\xb8"
+        self.logger = logger
 
     def update_company_column(self,df): # Remove arrows from the company column in dataframe
         for i, row in df.iterrows():
@@ -42,7 +43,8 @@ class DataFrameAccessor:
         try:
             start_index = text.index("]")+2 # +2 to avoid  ](
             return text[start_index:len(text)-4] # -3 to remove )**
-        except(ValueError):
+        except(ValueError) as err:
+            self.logger.log_data_accessor_exception(row,"No company link",err)
             return None
     
     def get_role(self,row): # Gets role
@@ -72,7 +74,8 @@ class DataFrameAccessor:
                 link_tag = soup.find("a")
                 href = link_tag.get("href")
                 return href
-        except(AttributeError): # No link tag
+        except(AttributeError) as err: # No link tag
+            self.logger.log_data_accessor_exception(row,"No link tag",err)
             return None
 
     def get_locations(self,row): # Gets nested/singular locations and returns a string of locations
@@ -87,15 +90,12 @@ class DataFrameAccessor:
             # Create a list of locations based on the content excluding the html
             locations = [str(x.get_text(" ")) for x in content if len(x)>1]
             return " | ".join(locations)
-        except(AttributeError): # No details tag
+        except(AttributeError) as err: # No details tag
             locations = soup.get_text(" | ")
+            self.logger.log_data_accessor_exception(row,"No details tag",err)
             return locations
-    def get_posted(self,row):
-        return row["Shared"]
 
-    def update_posted_status(self,index,df):
-        df.at[index,"Shared"]=True
-
-    def update_failed_posted_status(self,index,df):
-        df.at[index,"Shared"]=False
-        
+    def create_id(self,job_type,row):
+        combined_string = (job_type+row["Role"]+ row["Company"] + row["Date Posted"]+row["Location"]).encode()
+        unique_id = hashlib.sha256(combined_string).hexdigest()
+        return unique_id 
