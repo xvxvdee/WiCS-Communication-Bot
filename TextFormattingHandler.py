@@ -92,26 +92,5 @@ class TextFormattingHandler:
             readable_dt_str = yesterday.strftime(self.DATE_FORMAT)
             return readable_dt_str
         except(ValueError):
-            return text
-        
-    def dataframe_to_csv(self,df,posting_type):
-        filename = f"Data/{posting_type}.csv"
-        modification_time = os.path.getmtime(filename=filename)
-        modification_datetime = datetime.fromtimestamp(modification_time)
-        readable_time = modification_datetime.strftime('%a %b %d %Y')
-        
-        now = datetime.today().date()
-        formatted_now = now.strftime('%a %b %d %Y')
-        print(f"Last modified date for {filename}: {readable_time} | Today: {formatted_now}")
-
-        if formatted_now == readable_time: #If updated today, return that dataframe
-            df_csv = pd.read_csv(filename)
-            return df_csv
-        else:
-            try:
-                df.to_csv(filename,header=True,index=True)
-                return df
-            except(AttributeError):
-                print("No new postings.")
-                return None
+            return text        
 
