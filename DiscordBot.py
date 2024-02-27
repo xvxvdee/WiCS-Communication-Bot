@@ -46,8 +46,8 @@ async def on_ready():
 @tasks.loop(hours=24)
 async def send_new_grad_roles():
     logger.check_space()
-    job_channel = client.get_channel(1200151138645856266)
-    #plugs = client.get_channel(817211947908595713)
+    job_channel = client.get_channel(1202309603602464768)
+    plugs = client.get_channel(817211947908595713)
     df_posting = job_fetcher.latest_newgrad_postings()
     newgrad_color = 0xf2f0ff
 
@@ -81,7 +81,7 @@ async def send_new_grad_roles():
                 
                 try:
                     await job_channel.send(embed=embed)
-                    # await plugs.send(embed=embed)
+                    await plugs.send(embed=embed)
                     logger.set_sucessful_shared_status(hash_id)
                 except Exception as ex:
                     logger.set_failed_shared_status(hash_id)
@@ -95,7 +95,7 @@ async def send_new_grad_roles():
 @tasks.loop(hours=24)
 async def send_summer_roles():
     logger.check_space()
-    job_channel = client.get_channel(1200151138645856266)
+    job_channel = client.get_channel(1202309603602464768)
     df_posting = job_fetcher.latest_internship_postings()
     summer_color = 0xd1c171
     try:
@@ -141,7 +141,7 @@ async def send_summer_roles():
 @tasks.loop(hours=24)
 async def send_offseason_roles():
     logger.check_space()
-    job_channel = client.get_channel(1200151138645856266)
+    job_channel = client.get_channel(1202309603602464768)
     df_posting = job_fetcher.latest_offseason_postings()
     offseason_color = 0x71b4d1
 
