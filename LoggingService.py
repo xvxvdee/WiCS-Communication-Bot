@@ -4,20 +4,26 @@ from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from datetime import datetime
 import hashlib
+import time
 
 class LoggingService:
-    def __init__(self,uri):
+    def __init__(self,uri,max_retries = 3,delay=5):
         # Load DB
         client = MongoClient(uri, server_api=ServerApi('1'))
-        try:
-            client.admin.command('ping')
-            print("Pinged your deployment. You successfully connected to MongoDB!")
-            self.db = client['postings']
-            self.openings_collection = self.db["Openings"]
-            self.logging_collection = self.db["Logs"]
-            
-        except Exception as e:
-            print(e)
+        for attempt in range(max_retries):
+            try:
+                client.admin.command('ping')
+                print("Pinged your deployment. You successfully connected to MongoDB!")
+                self.db = client['postings']
+                self.openings_collection = self.db["Openings"]
+                self.logging_collection = self.db["Logs"]
+                break  # If successful, exit the loop
+            except Exception as e:
+                print(f"Attempt {attempt+1} failed: {e}")
+                if attempt < max_retries - 1:  # Only sleep if this is not the last attempt
+                    time.sleep(delay)  # Wait for some time before retrying
+                else:
+                    raise
 
     def log_startup(self):
         unique_id = hashlib.sha256(str(datetime.now()).encode()).hexdigest()
