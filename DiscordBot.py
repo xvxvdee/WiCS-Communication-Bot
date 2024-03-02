@@ -22,6 +22,7 @@ formatter = TextFormattingHandler()
 data_scraper = JobScrapingService(logger)
 job_fetcher = JobPostingFetcher(formatter,data_scraper,data_accessor)
 
+# Define icons for different types of roles
 newgrad_icon = "https://cdn-icons-png.flaticon.com/128/1991/1991047.png"
 internship_icon = "https://cdn-icons-png.flaticon.com/128/7376/7376577.png"
 offseason_icon = "https://cdn-icons-png.flaticon.com/128/2117/2117739.png"
@@ -30,6 +31,8 @@ offseason_icon = "https://cdn-icons-png.flaticon.com/128/2117/2117739.png"
 async def on_ready():
     print(f'{client.user} has connected to Discord!')
     logger.log_startup()
+
+    # Start tasks for sending roles
     try:
         send_new_grad_roles.start()
     except Exception as ex:
@@ -45,6 +48,8 @@ async def on_ready():
 
 @tasks.loop(hours=24)
 async def send_new_grad_roles():
+    # This function runs every 24 hours and sends new grad roles
+    
     logger.check_space()
     job_channel = client.get_channel(1202309603602464768)
     plugs = client.get_channel(817211947908595713)
@@ -94,6 +99,7 @@ async def send_new_grad_roles():
 
 @tasks.loop(hours=24)
 async def send_summer_roles():
+    # This function runs every 24 hours and sends summer roles
     logger.check_space()
     job_channel = client.get_channel(1202309603602464768)
     df_posting = job_fetcher.latest_internship_postings()
@@ -140,6 +146,7 @@ async def send_summer_roles():
 
 @tasks.loop(hours=24)
 async def send_offseason_roles():
+    # This function runs every 24 hours and sends offseason roles
     logger.check_space()
     job_channel = client.get_channel(1202309603602464768)
     df_posting = job_fetcher.latest_offseason_postings()
