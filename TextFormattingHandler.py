@@ -1,7 +1,9 @@
 import re
-import json
 import pandas as pd
+import json
 from datetime import datetime, timedelta
+import os
+import time
 
 class TextFormattingHandler:
     def __init__(self):
@@ -79,7 +81,6 @@ class TextFormattingHandler:
             yesterday = date_object - timedelta(days=1)
             # Format into readable string
             readable_dt_str = yesterday.strftime(self.DATE_FORMAT)
-            
             # If no posting on current day
             if datetime.today()-yesterday!= datetime.today()-timedelta(days=1):
                 return date_object.strftime(self.DATE_FORMAT)
@@ -91,4 +92,5 @@ class TextFormattingHandler:
             readable_dt_str = yesterday.strftime(self.DATE_FORMAT)
             return readable_dt_str
         except(ValueError):
-            return text
+            return text        
+

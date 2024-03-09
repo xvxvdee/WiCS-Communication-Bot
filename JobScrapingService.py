@@ -6,21 +6,18 @@ import json
 
 class JobScrapingService:
     
-    def __init__(self):
-        self.zobjobs="https://zobjobs.com/api/jobs/"
+    def __init__(self,logger):
         self.summer_internships ="https://raw.githubusercontent.com/SimplifyJobs/Summer2024-Internships/dev/README.md"
         self.offseason_internships = "https://api.github.com/repos/SimplifyJobs/Summer2024-Internships/contents/README-Off-Season.md?ref=dev"
         self.newgrad_internships = "https://api.github.com/repos/SimplifyJobs/New-Grad-Positions/contents/README.md?ref=dev"
-    
-    def get_remote_zobjobs(self): # Returns remote jobs in CA and USA in a JSON Format
-        contents = urllib.request.urlopen(self.zobjobs).read()
-        return contents
-    
+        self.logger = logger
+
     def get_github_internship2024(self):
         URL = self.summer_internships
         request = requests.get(URL) 
         request.encoding = request.apparent_encoding 
         soup = BeautifulSoup(request.text, 'html5lib') 
+        self.logger.log_data_scrapped(URL,"Summer roles scraped")
         return str(soup.encode("utf-8"))
     
     def get_github_offseason2024(self):
@@ -28,6 +25,7 @@ class JobScrapingService:
         response = requests.get(URL) 
         data = response.json()
         readme_content = base64.b64decode(data['content'])
+        self.logger.log_data_scrapped(URL,"Offseason roles scraped")
         return str(readme_content)
     
     def get_github_newgrad2024(self):
@@ -35,4 +33,5 @@ class JobScrapingService:
         response = requests.get(URL) 
         data = response.json()
         readme_content = base64.b64decode(data['content'])
+        self.logger.log_data_scrapped(URL,"Newgrad roles scraped")
         return str(readme_content)

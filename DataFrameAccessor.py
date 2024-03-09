@@ -2,14 +2,15 @@ from datetime import datetime, timedelta
 from mdplain import plain
 from bs4 import BeautifulSoup
 from TextFormattingHandler import TextFormattingHandler
-
+import hashlib
 class DataFrameAccessor:
-    def __init__(self):        
+    def __init__(self,logger):        
         self.EMOJI = "\\x"
         self.formatter = TextFormattingHandler()
         self.DATE_POSTED = "Date Posted"
         self.NO_SPONSORSHIP = "\\xf0\\x9f\\x9b\\x82"
         self.US_CITIZEN_ONLY = "\\xf0\\x9f\\x87\\xba\\xf0\\x9f\\x87\\xb8"
+        self.logger = logger
 
     def update_company_column(self,df): # Remove arrows from the company column in dataframe
         for i, row in df.iterrows():
@@ -23,9 +24,12 @@ class DataFrameAccessor:
         yesterday = self.formatter.get_previous_date(datetime.today())
         # Condition for there to be new postings
         new_postings = yesterday in df[self.DATE_POSTED].values
+
         if (new_postings):
             # Filter for the day before and avoid closed applications
             df_postings = df.loc[(df[self.DATE_POSTED] == str(yesterday))&(df["Application Link"].str.contains("https"))]# & (df["Application Link"] !=self.LOCK_EMOJI_1) & (df["Application Link"] !=self.LOCK_EMOJI_2)]
+            df_postings = df_postings.copy()
+            df_postings["Shared"] = False
             return df_postings
         else:
             return None
@@ -39,7 +43,8 @@ class DataFrameAccessor:
         try:
             start_index = text.index("]")+2 # +2 to avoid  ](
             return text[start_index:len(text)-4] # -3 to remove )**
-        except(ValueError):
+        except(ValueError) as err:
+            self.logger.log_data_accessor_exception(row,"No company link",err)
             return None
     
     def get_role(self,row): # Gets role
@@ -69,7 +74,8 @@ class DataFrameAccessor:
                 link_tag = soup.find("a")
                 href = link_tag.get("href")
                 return href
-        except(AttributeError): # No link tag
+        except(AttributeError) as err: # No link tag
+            self.logger.log_data_accessor_exception(row,"No link tag",err)
             return None
 
     def get_locations(self,row): # Gets nested/singular locations and returns a string of locations
@@ -84,7 +90,12 @@ class DataFrameAccessor:
             # Create a list of locations based on the content excluding the html
             locations = [str(x.get_text(" ")) for x in content if len(x)>1]
             return " | ".join(locations)
-        except(AttributeError): # No details tag
+        except(AttributeError) as err: # No details tag
             locations = soup.get_text(" | ")
+            self.logger.log_data_accessor_exception(row,"No details tag",err)
             return locations
-        
+
+    def create_id(self,job_type,row):
+        combined_string = (job_type+row["Role"]+ row["Company"] + row["Date Posted"]+row["Location"]).encode()
+        unique_id = hashlib.sha256(combined_string).hexdigest()
+        return unique_id 

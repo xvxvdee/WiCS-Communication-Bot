@@ -1,13 +1,9 @@
-from TextFormattingHandler import TextFormattingHandler
-from JobScrapingService import JobScrapingService
-from DataFrameAccessor import DataFrameAccessor
-
 class JobPostingFetcher:
 
-    def __init__(self):
-        self.formatter = TextFormattingHandler()
-        self.scraping_service = JobScrapingService()
-        self.data_accessor = DataFrameAccessor()
+    def __init__(self,formatter,scraping_service,data_accessor):
+        self.formatter = formatter
+        self.scraping_service = scraping_service
+        self.data_accessor = data_accessor
 
     def latest_internship_postings(self):
         # Set up dataframe
