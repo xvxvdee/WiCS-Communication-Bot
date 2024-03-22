@@ -19,6 +19,10 @@ This is a Discord bot that posts internship and new-grad roles
 ```
 DISCORD_TOKEN=<your discord bot token>
 MONGO_URI=<your mongodb connection string>
+CHANNEL_ID_1 = <WICS job posting channel id>
+SUMMER_LINK = <SimplifyJobs readme link, ex. "https://raw.githubusercontent.com/SimplifyJobs/Summer2024-Internships/dev/README.md">
+OFFSEASON_LINK = <SimplifyJobs readme link, ex. "https://api.github.com/repos/SimplifyJobs/Summer2024-Internships/contents/README-Off-Season.md?ref=dev">
+NEWGRAD_LINK = <SimplifyJobs readme link  ex. "https://api.github.com/repos/SimplifyJobs/New-Grad-Positions/contents/README.md?ref=dev">
 ```
 
 - Run the bot: `python DiscordBot.py`
