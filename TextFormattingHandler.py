@@ -4,7 +4,7 @@ import json
 from datetime import datetime, timedelta
 import os
 import time
-
+# WICS 2024-2025: Note this class made need to be restructed depending on whether you use a SimplyJobs Repo or not.
 class TextFormattingHandler:
     def __init__(self):
         self.table_start="Please leave a one line gap between this and the table TABLE_START (DO NOT CHANGE THIS LINE) -->\\n\\n"
