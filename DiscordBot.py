@@ -13,6 +13,8 @@ from JobScrapingService import JobScrapingService
 load_dotenv()
 TOKEN = os.getenv("TOKEN")
 URI = os.getenv("MONGODB_URI")
+CHANNEL_1 = int(os.getenv("CHANNEL_ID_1"))
+CHANNEL_2 = int(os.getenv("CHANNEL_ID_2")) # CAN BE REMOVED WICS 2024-2025
 client = commands.Bot(command_prefix="$",intents=discord.Intents.default()) 
 
 # Create instances for postings
@@ -49,10 +51,9 @@ async def on_ready():
 @tasks.loop(hours=24)
 async def send_new_grad_roles():
     # This function runs every 24 hours and sends new grad roles
-    
     logger.check_space()
-    job_channel = client.get_channel(1202309603602464768)
-    plugs = client.get_channel(817211947908595713)
+    job_channel = client.get_channel(CHANNEL_1)
+    plugs = client.get_channel(CHANNEL_2)
     df_posting = job_fetcher.latest_newgrad_postings()
     newgrad_color = 0xf2f0ff
 
@@ -101,7 +102,7 @@ async def send_new_grad_roles():
 async def send_summer_roles():
     # This function runs every 24 hours and sends summer roles
     logger.check_space()
-    job_channel = client.get_channel(1202309603602464768)
+    job_channel = client.get_channel(CHANNEL_1)
     df_posting = job_fetcher.latest_internship_postings()
     summer_color = 0xd1c171
     try:
@@ -148,7 +149,7 @@ async def send_summer_roles():
 async def send_offseason_roles():
     # This function runs every 24 hours and sends offseason roles
     logger.check_space()
-    job_channel = client.get_channel(1202309603602464768)
+    job_channel = client.get_channel(CHANNEL_1)
     df_posting = job_fetcher.latest_offseason_postings()
     offseason_color = 0x71b4d1
 

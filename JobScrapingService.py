@@ -3,13 +3,15 @@ import urllib.request
 import requests 
 import base64
 import json
-
+import os
+from dotenv import load_dotenv 
 class JobScrapingService:
     
     def __init__(self,logger):
-        self.summer_internships ="https://raw.githubusercontent.com/SimplifyJobs/Summer2024-Internships/dev/README.md"
-        self.offseason_internships = "https://api.github.com/repos/SimplifyJobs/Summer2024-Internships/contents/README-Off-Season.md?ref=dev"
-        self.newgrad_internships = "https://api.github.com/repos/SimplifyJobs/New-Grad-Positions/contents/README.md?ref=dev"
+        load_dotenv()
+        self.summer_internships = os.getenv("SUMMER_LINK")
+        self.offseason_internships = os.getenv("OFFSEASON_LINK")
+        self.newgrad_internships =  os.getenv("NEWGRAD_LINK")
         self.logger = logger
 
     def get_github_internship2024(self):
