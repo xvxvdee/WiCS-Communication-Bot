@@ -97,6 +97,8 @@ async def send_new_grad_roles():
     except(AttributeError) as err:
         logger.log_task_exception("TASK ERROR: While sending New Grad roles",err)
         return
+    except() as err:
+        return err
 
 @tasks.loop(hours=24)
 async def send_summer_roles():
@@ -144,6 +146,8 @@ async def send_summer_roles():
     except(AttributeError) as err:
         logger.log_task_exception("TASK ERROR: While sending summer roles",err)
         return
+    except() as err:
+        return err
 
 @tasks.loop(hours=24)
 async def send_offseason_roles():
@@ -194,5 +198,7 @@ async def send_offseason_roles():
     except(AttributeError) as err:
         logger.log_task_exception("TASK ERROR: While sending Offseason roles",err)
         return
+    except() as err:
+        return err
 
 client.run(TOKEN) #runs the bot with the login token from the .env file
